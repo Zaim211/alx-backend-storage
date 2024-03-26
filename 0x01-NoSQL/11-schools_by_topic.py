@@ -2,8 +2,10 @@
 """
 Python function that returns the list of school having a specific topic
 """
+import pymongo
 
 
 def schools_by_topic(mongo_collection, topic):
     """ Function search a specific topic """
-    return mongo_collection.find({"topic": {"$in": [topic]}})
+    result = mongo_collection.find({"topics": topic})
+    return list(result)
