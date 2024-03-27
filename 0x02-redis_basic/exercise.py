@@ -21,6 +21,7 @@ def count_calls(method: Callable) -> Callable:
         return method(self, *args, **kwargs)
     return wrapper
 
+
 def call_history(method: Callable) -> Callable:
     """ store the history of inputs and outputs for a particular function """
     @wraps(method)
@@ -33,8 +34,10 @@ def call_history(method: Callable) -> Callable:
         return output
     return wrapper
 
+
 def replay(fn: Callable):
-    """ function to display the history of calls of a particular function. """
+    """ function to display the history of calls of
+    a particular function. """
     r = redis.Redis()
     p_function = fn.__qualname__
     call = r.get(p_function)
@@ -75,7 +78,7 @@ class Cache:
         return r_key
 
     def get(self, key: str,
-                fn: Optional[Callable] = None) -> Union[str, bytes, int, float]:
+            fn: Optional[Callable] = None) -> Union[str, bytes, int, float]:
         """ convert the data back to the desired format. """
         value = self._redis.get(key)
         if fn:
