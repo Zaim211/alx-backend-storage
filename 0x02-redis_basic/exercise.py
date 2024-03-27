@@ -5,7 +5,20 @@ Writing strings to Redis
 import redis
 from uuid import uuid4
 from typing import Union, Callable, Optional
+from functools import wraps
 
+
+def count_calls(method: Callable) -> Callable:
+    """ count how many times methods of the Cache class are called """
+    key = method.__qualname__
+
+    def wrapper(*args, **kwds):
+        """  increments the count for that key every time the method
+        is called and returns the value returned
+        by the original method. """
+        self._redis.INCR(key)
+        return method(self, *args, **kwds)
+    return wrapper
 
 class Cache:
     """ Declare a cache redis class """
