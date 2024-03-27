@@ -12,12 +12,12 @@ def count_calls(method: Callable) -> Callable:
     """ count how many times methods of the Cache class are called """
     key = method.__qualname__
 
-    def wrapper(*args, **kwds):
+    def wrapper(self, *args, **kwargs):
         """  increments the count for that key every time the method
         is called and returns the value returned
         by the original method. """
-        self._redis.INCR(key)
-        return method(self, *args, **kwds)
+        self._redis.incr(key)
+        return method(self, *args, **kwargs)
     return wrapper
 
 class Cache:
@@ -31,9 +31,9 @@ class Cache:
 
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """  takes a data argument and returns a string """
-        key = str(uuid4())
-        self._redis.set(key, data)
-        return key
+        r_key = str(uuid4())
+        self._redis.set(r_key, data)
+        return r_key
 
     def get(self, key: str,
                 fn: Optional[Callable] = None) -> Union[str, bytes, int, float]:
