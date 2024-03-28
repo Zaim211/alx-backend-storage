@@ -17,7 +17,7 @@ def count_accessed_url(method):
         key = "cache:" + url
         data = store.get(key)
         if data:
-            retrun data.decode("utf-8")
+            return data.decode("utf-8")
         counter = "count:" + url
         html = method(url)
         store.incr(count_key)
