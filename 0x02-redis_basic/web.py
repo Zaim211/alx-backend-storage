@@ -6,8 +6,6 @@ import requests
 from functools import wraps
 import redit
 
-store = redis.Redis()
-
 
 def count_accessed_url(method):
     """ Decorate the count of how many
@@ -20,11 +18,12 @@ def count_accessed_url(method):
             return data.decode("utf-8")
         counter = "count:" + url
         html = method(url)
-        store.incr(counter)
-        store.set(key, html)
-        store.expire(key, 10)
+        redis.Redis().incr(counter)
+        redis.Redis().set(key, html)
+        redis.Redis().expire(key, 10)
         return html
     return wrapper
+
 
 @count_accessed_url
 def get_page(url: str) -> str:
