@@ -31,5 +31,5 @@ def get_page(url: str) -> str:
     """ Using requests module to obtain
     HTML content of a particular URL and returns it
     """
-    url = "http://slowwly.robertomurray.co.uk"
-    return requests.get(url).text
+    response = requests.get(url)
+    return response.text
