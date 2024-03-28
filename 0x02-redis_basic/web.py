@@ -4,7 +4,7 @@ Implementing an expiring web cache and tracker
 """
 import requests
 from functools import wraps
-import redit
+import redis
 
 
 def count_accessed_url(method):
