@@ -13,7 +13,7 @@ def count_accessed_url(method):
     @wraps(method)
     def wrapper(url):
         key = "cache:" + url
-        data = store.get(key)
+        data = redis.Redis().get(key)
         if data:
             return data.decode("utf-8")
 
@@ -34,3 +34,9 @@ def get_page(url: str) -> str:
     """
     response = requests.get(url)
     return response.text
+
+
+if __name__ == "__main__":
+    # Test the get_page function
+    url = "http://slowwly.robertomurray.co.uk"
+    print(get_page(url))
