@@ -20,7 +20,6 @@ def count_accessed_url(method: Callable) -> Callable:
 
         counter = "count:" + url
         html = method(url)
-
         redis.Redis().incr(counter)
         redis.Redis().set(key, html)
         redis.Redis().expire(key, 10)
@@ -35,3 +34,9 @@ def get_page(url: str) -> str:
     """
     response = requests.get(url)
     return response.text
+
+
+if __name__ == "__main__":
+    # Test the get_page function
+    url = "http://slowwly.robertomurray.co.uk"
+    print(get_page(url))
