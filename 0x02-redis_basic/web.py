@@ -16,8 +16,10 @@ def count_accessed_url(method):
         data = store.get(key)
         if data:
             return data.decode("utf-8")
+
         counter = "count:" + url
         html = method(url)
+
         redis.Redis().incr(counter)
         redis.Redis().set(key, html)
         redis.Redis().expire(key, 10)
