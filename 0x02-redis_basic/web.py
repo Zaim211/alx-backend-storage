@@ -5,28 +5,25 @@ Implementing an expiring web cache and tracker
 import requests
 from functools import wraps
 import redis
+from typing import Callable
 
 
-redis_store = redis.Redis()
-"""The module-level Redis instance.
-"""
-
-
-def count_accessed_url(method):
+def count_accessed_url(method: Callable) -> Callable:
     """ Decorate the count of how many
     times the URL is accessed """
     @wraps(method)
     def wrapper(url):
         key = "cache:" + url
-        data = redis_store.get(key)
+        data = redis.Redis().get(key)
         if data:
             return data.decode("utf-8")
 
         counter = "count:" + url
         html = method(url)
 
-        redis_store.incr(counter)
-        redis_store.setex(key, 10, html)
+        redis.Redis().incr(counter)
+        redis.Redis().set(key, html)
+        redis.Redis().expire(key, 10)
         return html
     return wrapper
 
@@ -42,5 +39,5 @@ def get_page(url: str) -> str:
 
 if __name__ == "__main__":
     # Test the get_page function
-    url = "http://slowwly.robertomurray.co.uk/delay/5000/url/https://www.example.com"
+    url = "http://slowwly.robertomurray.co.uk"
     print(get_page(url))
