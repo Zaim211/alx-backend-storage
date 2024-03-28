@@ -26,6 +26,7 @@ def count_accessed_url(method):
         return html
     return wrapper
 
+@count_accessed_url
 def get_page(url: str) -> str:
     """ Using requests module to obtain
     HTML content of a particular URL and returns it
